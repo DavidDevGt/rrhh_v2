@@ -144,6 +144,7 @@ CREATE TABLE roles (
 CREATE TABLE permisos (
     id_permiso INT AUTO_INCREMENT PRIMARY KEY,
     nombre_permiso VARCHAR(50),
+    descripcion VARCHAR(255),
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -270,3 +271,17 @@ SELECT empleado_id, COUNT(*) AS total_dias_trabajados
 FROM registros_asistencia
 WHERE fecha BETWEEN '2023-01-01' AND '2023-12-31'
 GROUP BY empleado_id;
+
+-- Configuración de lógica de negocio
+
+INSERT INTO permisos (nombre_permiso, descripcion) VALUES 
+('lectura', 'Permiso para leer datos'),
+('escritura', 'Permiso para escribir datos'),
+('edicion', 'Permiso para editar datos'),
+('eliminacion', 'Permiso para eliminar datos');
+
+INSERT INTO estados_empleado (estado) VALUES 
+('activo'), 
+('suspendido'),
+('capacitacion'), 
+('finalizado');
