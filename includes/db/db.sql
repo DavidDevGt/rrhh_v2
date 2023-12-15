@@ -213,3 +213,53 @@ CREATE TABLE multas (
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
     FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
 );
+
+-- Índice para búsqueda por nombre y apellido en la tabla de empleados
+ALTER TABLE empleados ADD INDEX idx_nombre_apellido (nombre, apellido);
+
+-- Índice para filtrado por área y posición
+ALTER TABLE empleados ADD INDEX idx_area_posicion (id_area, id_posicion);
+
+-- Índice para optimizar las consultas en la tabla de asistencias
+ALTER TABLE asistencias ADD INDEX idx_fecha (fecha);
+
+-- Índice para la tabla de vacaciones
+ALTER TABLE vacaciones ADD INDEX idx_fecha_inicio_fin (fecha_inicio, fecha_fin);
+
+-- Vista para informe de asistencia de empleados
+CREATE VIEW vista_asistencia AS
+SELECT e.nombre, e.apellido, a.fecha, a.hora_entrada, a.hora_salida
+FROM empleados e
+JOIN asistencias a ON e.id_empleado = a.id_empleado;
+
+-- Vista para informe de evaluaciones de desempeño
+CREATE VIEW vista_evaluaciones AS
+SELECT e.nombre, e.apellido, ed.fecha_evaluacion, ed.puntuacion
+FROM empleados e
+JOIN evaluaciones_desempeno ed ON e.id_empleado = ed.id_empleado;
+
+-- Vista para informe de vacaciones
+CREATE VIEW vista_vacaciones AS
+SELECT e.nombre, e.apellido, v.fecha_inicio, v.fecha_fin, v.dias_tomados
+FROM empleados e
+JOIN vacaciones v ON e.id_empleado = v.id_empleado;
+
+-- Vista para informe de salarios
+CREATE VIEW vista_salarios AS
+SELECT e.nombre, e.apellido, rs.salario, rs.fecha_inicio, rs.fecha_fin
+FROM empleados e
+JOIN registro_salarios rs ON e.id_empleado = rs.id_empleado;
+
+-- Vista para adelantos de salario
+CREATE VIEW vista_adelantos_salario AS
+SELECT 
+    e.nombre, e.apellido, ad.monto, ad.fecha_solicitud, ad.fecha_pago, ad.estado
+FROM empleados e
+JOIN adelantos_salario ad ON e.id_empleado = ad.id_empleado;
+
+-- Vista para llamadas de atención de empleados a detalle
+CREATE VIEW vista_llamadas_atencion_detalle AS
+SELECT 
+    e.id_empleado, e.nombre, e.apellido, l.fecha, l.motivo, l.acciones_tomadas
+FROM empleados e
+JOIN llamadas_atencion l ON e.id_empleado = l.id_empleado;
