@@ -263,3 +263,10 @@ SELECT
     e.id_empleado, e.nombre, e.apellido, l.fecha, l.motivo, l.acciones_tomadas
 FROM empleados e
 JOIN llamadas_atencion l ON e.id_empleado = l.id_empleado;
+
+-- Vista para asistencias mensuales de empleados con un rango de fechas
+CREATE VIEW vista_asistencia_mensual AS
+SELECT empleado_id, COUNT(*) AS total_dias_trabajados
+FROM registros_asistencia
+WHERE fecha BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY empleado_id;
