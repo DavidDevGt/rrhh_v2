@@ -8,7 +8,9 @@ $router->map('GET', '/', function() {
     require __DIR__ . '/index.php';
 });
 
-// Otras rutas...
+$router->map('GET', '/', function() {
+    require __DIR__ . '/index.php';
+});
 
 // Match the current request
 $match = $router->match();
