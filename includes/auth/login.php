@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../db/db.php';
+require_once '../funciones.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -13,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $user['contrasena_hash'])) {
             $_SESSION['user_id'] = $user['id_usuario'];
             $_SESSION['username'] = $user['nombre_usuario'];
+
+            // Cargar roles y permisos
+            $_SESSION['roles'] = cargarRoles($user['id_usuario']);
+            $_SESSION['permisos'] = cargarPermisos($user['id_usuario']);
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Credenciales inválidas']);
