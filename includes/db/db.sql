@@ -265,13 +265,6 @@ SELECT
 FROM empleados e
 JOIN llamadas_atencion l ON e.id_empleado = l.id_empleado;
 
--- Vista para asistencias mensuales de empleados con un rango de fechas
-CREATE VIEW vista_asistencia_mensual AS
-SELECT empleado_id, COUNT(*) AS total_dias_trabajados
-FROM registros_asistencia
-WHERE fecha BETWEEN '2023-01-01' AND '2023-12-31'
-GROUP BY empleado_id;
-
 -- Configuración de lógica de negocio
 
 INSERT INTO permisos (nombre_permiso, descripcion) VALUES 
@@ -290,3 +283,18 @@ INSERT INTO roles (nombre_rol) VALUES
 ('Administrador'), 
 ('Gerente'), 
 ('Empleado');
+
+-- Insertar usuarios de prueba
+INSERT INTO usuarios (nombre_usuario, contrasena_hash, email, activo) VALUES 
+('admin', 'password123', 'admin@example.com', 1),
+('gerente', 'password123', 'gerente@example.com', 1),
+('empleado', 'password123', 'empleado@example.com', 1);
+
+-- Obtener los ID de roles para referencia, aunque ya van ordenados creo :v
+SELECT id_rol FROM roles WHERE nombre_rol IN ('Administrador', 'Gerente', 'Empleado');
+
+-- Asociar cada usuario con un rol
+INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES 
+((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'admin'), 1),
+((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'gerente'), 2),
+((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'empleado'), 3);
