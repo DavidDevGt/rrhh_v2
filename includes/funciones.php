@@ -1,6 +1,7 @@
 <?php
+require_once 'db/db.php';
 
-//* FUNCIONES ÚTILES *//
+//* FUNCIONES ÚTILES PARA EL FUNCIONAMIENTO DEL SISTEMA *//
 
 // Función para verificar una contraseña
 function verificarContraseña($contraseña, $hash)
@@ -40,13 +41,15 @@ function generarToken($longitud = 10)
 }
 
 // Función para generar un nombre de documento PDF
-function generarNombreDocumentoPDF($tipoDocumento, $idEmpleado) {
+function generarNombreDocumentoPDF($tipoDocumento, $idEmpleado)
+{
     $fecha = date('Ymd');
     return $tipoDocumento . '_' . $idEmpleado . '_' . $fecha . '.pdf';
 }
 
 // Funcion para importar datos desde un archivo CSV
-function importarDatosDesdeCSV($archivoCSV) {
+function importarDatosDesdeCSV($archivoCSV)
+{
     $datos = array();
     if (($handle = fopen($archivoCSV, "r")) !== FALSE) {
         while (($fila = fgetcsv($handle, 1000, ",")) !== FALSE) {
@@ -59,7 +62,8 @@ function importarDatosDesdeCSV($archivoCSV) {
 
 
 // Función para exportar datos a un archivo CSV
-function exportarDatosACSV($datos, $nombreArchivo) {
+function exportarDatosACSV($datos, $nombreArchivo)
+{
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=' . $nombreArchivo);
     $output = fopen('php://output', 'w');
@@ -69,20 +73,50 @@ function exportarDatosACSV($datos, $nombreArchivo) {
     fclose($output);
 }
 
+// TODO: Roles y permisos
+
+// Función para cargar los roles de un usuario
+function cargarRoles($idUsuario)
+{
+    $sql = "SELECT r.nombre_rol FROM roles r JOIN usuarios_roles ur ON r.id_rol = ur.id_rol WHERE ur.id_usuario = $idUsuario";
+    $result = dbQuery($sql);
+    return dbFetchAll($result);
+}
+
+// Función para cargar los permisos de un usuario
+function cargarPermisos($idUsuario)
+{
+    $sql = "SELECT p.nombre_permiso FROM permisos p JOIN roles_permisos rp ON p.id_permiso = rp.id_permiso JOIN usuarios_roles ur ON rp.id_rol = ur.id_rol WHERE ur.id_usuario = $idUsuario";
+    $result = dbQuery($sql);
+    return dbFetchAll($result);
+}
+
+function tieneRol($rol) {
+    return in_array($rol, array_column($_SESSION['roles'], 'nombre_rol'));
+}
+
+function tienePermiso($permiso) {
+    return in_array($permiso, array_column($_SESSION['permisos'], 'nombre_permiso'));
+}
+
+
 //* LÓGICA DE NEGOCIO *//
 
 // Vacaciones
-function calcularVacaciones($salarioMensual, $mesesTrabajados) {
+function calcularVacaciones($salarioMensual, $mesesTrabajados)
+{
     return ($salarioMensual / 12) * ($mesesTrabajados / 12) * 15;
 }
 
 
 // Aguinaldo
-function calcularAguinaldo($salarioMensual, $mesesTrabajados) {
+function calcularAguinaldo($salarioMensual, $mesesTrabajados)
+{
     return ($salarioMensual / 12) * $mesesTrabajados;
 }
 
 // Bono 14
-function calcularBono14($salarioMensual, $mesesTrabajados) {
+function calcularBono14($salarioMensual, $mesesTrabajados)
+{
     return ($salarioMensual / 12) * $mesesTrabajados;
 }

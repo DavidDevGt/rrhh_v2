@@ -5,24 +5,24 @@ USE rrhh_system;
 -- Crear la tabla de empleados con los campos adicionales
 CREATE TABLE empleados (
     id_empleado INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50),
-    apellido VARCHAR(50),
-    dpi VARCHAR(20),
-    fecha_nacimiento DATE,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    dpi VARCHAR(20) NOT NULL UNIQUE,
+    fecha_nacimiento DATE NOT NULL,
     direccion VARCHAR(100),
     telefono VARCHAR(20),
-    email VARCHAR(50),
-    id_area INT,
-    id_posicion INT,
-    id_estado INT,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    id_area INT NOT NULL,
+    id_posicion INT NOT NULL,
+    id_estado INT NOT NULL,
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_area) REFERENCES areas(id_area),
     FOREIGN KEY (id_posicion) REFERENCES posiciones(id_posicion),
     FOREIGN KEY (id_estado) REFERENCES estados_empleado(id_estado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de áreas
@@ -32,8 +32,8 @@ CREATE TABLE areas (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    usuario_modificacion INT,
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de posiciones
@@ -45,8 +45,8 @@ CREATE TABLE posiciones (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    usuario_modificacion INT,
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de asistencias
@@ -59,9 +59,9 @@ CREATE TABLE asistencias (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de vacaciones
@@ -74,9 +74,9 @@ CREATE TABLE vacaciones (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de evaluaciones de desempeño
@@ -89,9 +89,9 @@ CREATE TABLE evaluaciones_desempeno (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de estados de empleado
@@ -101,8 +101,8 @@ CREATE TABLE estados_empleado (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    usuario_modificacion INT,
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de llamadas de atención
@@ -115,9 +115,9 @@ CREATE TABLE llamadas_atencion (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de usuarios
@@ -144,6 +144,7 @@ CREATE TABLE roles (
 CREATE TABLE permisos (
     id_permiso INT AUTO_INCREMENT PRIMARY KEY,
     nombre_permiso VARCHAR(50),
+    descripcion VARCHAR(255),
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -178,9 +179,9 @@ CREATE TABLE adelantos_salario (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de registro de salarios
@@ -193,9 +194,9 @@ CREATE TABLE registro_salarios (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Crear la tabla de multas
@@ -209,9 +210,9 @@ CREATE TABLE multas (
     activo TINYINT DEFAULT 1 NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    usuario_modifica INT,
+    usuario_modificacion INT,
     FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    FOREIGN KEY (usuario_modifica) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (usuario_modificacion) REFERENCES usuarios(id_usuario)
 );
 
 -- Índice para búsqueda por nombre y apellido en la tabla de empleados
@@ -270,3 +271,22 @@ SELECT empleado_id, COUNT(*) AS total_dias_trabajados
 FROM registros_asistencia
 WHERE fecha BETWEEN '2023-01-01' AND '2023-12-31'
 GROUP BY empleado_id;
+
+-- Configuración de lógica de negocio
+
+INSERT INTO permisos (nombre_permiso, descripcion) VALUES 
+('lectura', 'Permiso para leer datos'),
+('escritura', 'Permiso para escribir datos'),
+('edicion', 'Permiso para editar datos'),
+('eliminacion', 'Permiso para eliminar datos');
+
+INSERT INTO estados_empleado (estado) VALUES 
+('activo'), 
+('suspendido'),
+('capacitacion'), 
+('finalizado');
+
+INSERT INTO roles (nombre_rol) VALUES 
+('Administrador'), 
+('Gerente'), 
+('Empleado');
