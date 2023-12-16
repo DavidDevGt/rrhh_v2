@@ -298,3 +298,20 @@ INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES
 ((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'admin'), 1),
 ((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'gerente'), 2),
 ((SELECT id_usuario FROM usuarios WHERE nombre_usuario = 'empleado'), 3);
+
+INSERT INTO roles_permisos (id_rol, id_permiso) VALUES 
+(1, 1), -- Administrador tiene permiso de lectura
+(1, 2), -- Administrador tiene permiso de escritura
+(1, 3), -- Administrador tiene permiso de edición
+(1, 4); -- Administrador tiene permiso de eliminación
+
+-- Asignar permisos específicos a otros roles
+-- Por ejemplo, el rol de Gerente (id_rol = 2) solo tiene permisos de lectura y edición
+INSERT INTO roles_permisos (id_rol, id_permiso) VALUES 
+(2, 1), -- Gerente tiene permiso de lectura
+(2, 2), -- Gerente tiene permiso de escritura
+(2, 3); -- Gerente tiene permiso de edición
+
+-- Asignar permisos al rol de Empleado (id_rol = 3) solo permiso de lectura
+INSERT INTO roles_permisos (id_rol, id_permiso) VALUES 
+(3, 1); -- Empleado tiene permiso de lectura
