@@ -3,21 +3,29 @@ require __DIR__ . '/libs/vendor/autoload.php';
 
 $router = new AltoRouter();
 
-// Configura tus rutas aquí
+// Página principal
 $router->map('GET', '/', function() {
     require __DIR__ . '/index.php';
 });
 
-$router->map('GET', '/', function() {
-    require __DIR__ . '/index.php';
+// Dashboard del usuario
+$router->map('GET', '/dashboard', function() {
+    require __DIR__ . '/modules/dashboard.php';
 });
 
-// Match the current request
+// Otras rutas...
+$router->map('GET', '/gestion-empleados', function() {
+    require __DIR__ . '/modules/gestion_empleados/index.php';
+});
+
+// Más rutas...
+
+// Coincidencia con la solicitud actual
 $match = $router->match();
 
 if($match && is_callable($match['target'])) {
     call_user_func_array($match['target'], $match['params']); 
 } else {
-    // No route was matched
+    // Si no se encuentra la ruta
     header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
 }

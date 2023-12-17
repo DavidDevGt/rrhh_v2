@@ -3,24 +3,6 @@ require_once 'db/db.php';
 
 //* FUNCIONES ÚTILES PARA EL FUNCIONAMIENTO DEL SISTEMA *//
 
-// Función para verificar una contraseña
-function verificarContraseña($contraseña, $hash)
-{
-    return password_verify($contraseña, $hash);
-}
-
-// Función para validar un email
-function esEmailValido($email)
-{
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
-// Función para hashear una contraseña
-function hashearContraseña($contraseña)
-{
-    return password_hash($contraseña, PASSWORD_DEFAULT);
-}
-
 // Función para obtener la fecha y hora actual en formato específico
 function fechaHoraActual($formato = 'Y-m-d H:i:s')
 {
@@ -73,7 +55,7 @@ function exportarDatosACSV($datos, $nombreArchivo)
     fclose($output);
 }
 
-// TODO: Roles y permisos
+//* Usuarios, Roles y permisos
 
 // Función para cargar los roles de un usuario
 function cargarRoles($idUsuario)
@@ -95,8 +77,44 @@ function tieneRol($rol) {
     return in_array($rol, array_column($_SESSION['roles'], 'nombre_rol'));
 }
 
-function tienePermiso($permiso) {
-    return in_array($permiso, array_column($_SESSION['permisos'], 'nombre_permiso'));
+function tienePermiso($permisosNecesarios) {
+    $permisosUsuario = array_column($_SESSION['permisos'], 'nombre_permiso');
+    foreach ($permisosNecesarios as $permiso) {
+        if (in_array($permiso, $permisosUsuario)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function esEmailValido($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function usuarioExiste($username) {
+    $sql = "SELECT COUNT(*) FROM usuarios WHERE nombre_usuario = '$username'";
+    $result = dbQuery($sql);
+    $count = dbFetchAssoc($result)['COUNT(*)'];
+    return $count > 0;
+}
+
+function emailExiste($email) {
+    $sql = "SELECT COUNT(*) FROM usuarios WHERE email = '$email'";
+    $result = dbQuery($sql);
+    $count = dbFetchAssoc($result)['COUNT(*)'];
+    return $count > 0;
+}
+
+// Función para verificar una contraseña
+function verificarContraseña($contraseña, $hash)
+{
+    return password_verify($contraseña, $hash);
+}
+
+// Función para hashear una contraseña
+function hashearContraseña($contraseña)
+{
+    return password_hash($contraseña, PASSWORD_DEFAULT);
 }
 
 
