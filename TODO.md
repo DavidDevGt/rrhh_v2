@@ -11,4 +11,3 @@ location / {
 }
 ```
 
-    Esta configuración hará que Nginx intente servir el archivo o directorio solicitado si existe. Si no, redirigirá la solicitud a `index.php`, pasando los parámetros de la URL.
