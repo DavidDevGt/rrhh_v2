@@ -5,7 +5,7 @@ Para Nginx, necesitarás agregar una configuración específica al archivo de co
 1.  **Edita el archivo de configuración de tu sitio en Nginx**.
 2.  **Agrega la siguiente configuración dentro del bloque `server`**:
 
-        ```nginx
+        ```
     location / {
     try_files $uri $uri/ /index.php?$query_string;
     }
